@@ -1,0 +1,4 @@
+runpod
+faster-whisper
+torch
+soundfile

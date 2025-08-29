@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Whisper / Faster Whisper cache
+.workspace/
+.cache/
+.cache/faster-whisper/
+
+# Docker
+*.log
+*.tmp
+
+# IDE
+.vscode/
+.idea/
