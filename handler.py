@@ -25,7 +25,7 @@ def transcribe(audio_bytes: bytes) -> str:
     """Функция транскрибации"""
     audio_stream = io.BytesIO(audio_bytes)
     audio, sr = sf.read(audio_stream, dtype="float32")
-    segments, _ = model.transcribe(audio, task="transcribe", beam_size=3, best_of=1, vad_filter=False, language="ru")
+    segments, _ = model.transcribe(audio, beam_size=3, best_of=1, vad_filter=False, language="ru")
     return " ".join(seg.text for seg in segments).strip()
 
 
