@@ -34,15 +34,14 @@ def transcribe(audio_bytes: bytes) -> str:
     """Функция транскрибации"""
     audio_stream = io.BytesIO(audio_bytes)
     audio, sr = sf.read(audio_stream, dtype="float32")
-    segments, _ = model.transcribe(audio, beam_size=3, best_of=1, vad_filter=False, language="ru")
+    segments, info = model.transcribe(audio, beam_size=3, best_of=1, vad_filter=False, initial_prompt="Это речь на русском языке.", language="ru", task="transcribe")
+    print("Detected language:", info.language, "prob:", info.language_probability)
     return " ".join(seg.text for seg in segments).strip()
 
 
 def handler(job):
     try:
         data = job["input"]
-
-        # Получение аудио
         if "audio_url" in data:
             resp = requests.get(data["audio_url"])
             audio_bytes = resp.content
