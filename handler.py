@@ -4,17 +4,26 @@ import io
 import requests
 import soundfile as sf
 from faster_whisper import WhisperModel
-from faster_whisper.utils import download_model
+from huggingface_hub import snapshot_download
+import os
+from dotenv import load_dotenv
 
-MODEL_NAME = "distil-large-v3"
+load_dotenv() 
 
+ASR_MODEL_NAME = "deepdml/faster-whisper-large-v3-turbo-ct2"
+HF_CACHE = "/workspace/.cache/huggingface"
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 def load_model():
-    print(f"Downloading model weights for {MODEL_NAME}...")
-    download_model(MODEL_NAME, cache_dir="/workspace/.cache/faster-whisper")
-    print("Model downloaded, loading...")
-    return WhisperModel(MODEL_NAME, device="cuda", compute_type="float16")
-
+    print(f"Проверка и загрузка модели {ASR_MODEL_NAME}...")
+    local_path = snapshot_download(
+        repo_id=ASR_MODEL_NAME,
+        cache_dir=HF_CACHE,
+        local_files_only=False,
+        token=HF_TOKEN
+    )
+    print(f"Модель скачана в {local_path}, загружаем...")
+    return WhisperModel(local_path, device="cuda", compute_type="float16")
 
 print(">>> Загружаем модель...")
 model = load_model()
